@@ -1,5 +1,9 @@
 # N1MM Logger+ 中文实践指南（自动检测 · 个性化 · DeepSeek AI 助手）
 
+![N1MM Logger+ 中文指南界面预览（演示模式）](docs/preview.webp)
+
+> **界面预览**：页面顶部自动显示本机检测结果（N1MM 版本 / 程序目录 / 用户数据目录 / 数据库 / 呼号 / TQSL 状态）与个性化下一步建议，右下角是内置的 DeepSeek AI 助手。图中为 `?demo=1` 演示模式的通用示例数据。
+
 一个可在**任意 Windows 电脑**上直接运行的本地网站：双击启动后，本地服务器会自动检测该电脑上的 N1MM Logger+ 安装信息、用户数据目录、数据库与 TQSL 状态，并据此显示**针对当前使用者的路径、版本与下一步建议**；页面右下角内置 DeepSeek AI 助手，可结合本机环境回答初次设置、比赛日志、多地点共用日志与 ARRL LoTW/TQSL 上传等问题。
 
 > 本指南由业余无线电爱好者整理，不隶属于 N1MM Logger+ 或 ARRL。软件界面、比赛规则与 LoTW 政策可能更新，请以官方最新说明为准。
@@ -42,6 +46,8 @@ node server.mjs --port 9000
 
 直接双击 `index.html` 也能阅读全部教程、使用内置知识库与 DeepSeek 直连模式；但浏览器出于安全原因**禁止网页读取本机路径**，此时自动检测不可用，页面会提示你手动填写呼号/网格。要获得“自动检测 + 个性化”，请用上面的本地服务器方式打开。
 
+想看界面长什么样，也可以在浏览器中打开 `index.html?demo=1` 进入演示模式。
+
 ## 自动检测会读取什么？
 
 `server.mjs` 的 `GET /api/detect` 会在本机执行以下检测（只读）：
@@ -78,6 +84,7 @@ API Key 默认保存在浏览器 `localStorage`，只发送给 DeepSeek 或本�
 | `styles.css` | 样式表 |
 | `app.js` | 知识库、检索、检测结果渲染、DeepSeek 调用与聊天界面 |
 | `server.mjs` | 本地静态服务器 + `/api/detect` 自动检测 + DeepSeek 流式代理 |
+| `docs/preview.webp` | 界面预览图（演示模式，通用示例数据） |
 | `启动网站.bat` | Windows 一键启动 |
 | `start.sh` | macOS / Linux 启动脚本 |
 | `package.json` | 项目元数据（`npm start`） |
