@@ -1,0 +1,16 @@
+{
+  "name": "n1mm-logger-cn-guide",
+  "version": "1.0.0",
+  "private": false,
+  "description": "N1MM Logger+ 中文实践指南：自动检测本机安装/数据目录，内置 DeepSeek AI 助手，涵盖初次设置、比赛日志、多地点与 ARRL LoTW/TQSL 上传。",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "start:no-open": "node server.mjs --no-open"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "keywords": ["n1mm","amateur-radio","ham-radio","contest-logging","lotw","tqsl","deepseek"]
+}
