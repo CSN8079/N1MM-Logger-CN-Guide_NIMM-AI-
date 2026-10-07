@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>N1MM Logger+ 中文实践指南 · 初次设置 / 比赛 / 多地点 / LoTW 上传</title>
+<meta name="description" content="基于 N1MM Logger+ 官方文档与 ARRL LoTW/TQSL 官方说明整理的中文实践指南，内置 DeepSeek AI 助手，解答初次设置、比赛日志、多地点共用日志与 LoTW 签名上传。">
+<meta name="theme-color" content="#0a0f1e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231e63b8'/%3E%3Cpath d='M16 24V13M12 24V17M20 24V17M8 24V20M24 24V20' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="none"><path d="M12 20v-9M8 20v-6M16 20v-6M4 20v-4M20 20v-4" stroke="#cfe6ff" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+      <span>N1MM Logger+ 中文指南<small>初次设置 · 比赛 · 多地点 · LoTW</small></span>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="展开导航">☰</button>
+    <nav class="topnav" id="topnav">
+      <a href="#start">初次设置</a>
+      <a href="#daily">日常记录</a>
+      <a href="#contest">比赛设置</a>
+      <a href="#multi">多地点/多机</a>
+      <a href="#lotw">LoTW 上传</a>
+      <a href="#faq">常见问题</a>
+      <a href="#sources">官方来源</a>
+      <a href="#ai" class="cta">🤖 AI 助手</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+<aside class="toc" id="toc">
+  <h3>目录</h3>
+  <a href="#about">本机环境与使用说明</a>
+  <a href="#start">1. 初次设置</a>
+  <a href="#start-install" class="sub">1.1 安装与升级</a>
+  <a href="#start-dirs" class="sub">1.2 程序目录 vs 数据目录</a>
+  <a href="#start-db" class="sub">1.3 新建数据库</a>
+  <a href="#start-log" class="sub">1.4 建立第一份日志</a>
+  <a href="#start-station" class="sub">1.5 台站数据</a>
+  <a href="#start-config" class="sub">1.6 电台 / 端口 / 音频</a>
+  <a href="#start-check" class="sub">1.7 验收清单</a>
+  <div class="sep"></div>
+  <a href="#daily">2. 日常记录与界面</a>
+  <a href="#daily-entry" class="sub">2.1 录入窗口</a>
+  <a href="#daily-windows" class="sub">2.2 常用窗口</a>
+  <a href="#daily-keys" class="sub">2.3 快捷键</a>
+  <a href="#daily-edit" class="sub">2.4 修改与查找</a>
+  <a href="#daily-backup" class="sub">2.5 备份</a>
+  <div class="sep"></div>
+  <a href="#contest">3. 比赛日志设置</a>
+  <a href="#contest-new" class="sub">3.1 选择比赛类型</a>
+  <a href="#contest-cat" class="sub">3.2 类别设置</a>
+  <a href="#contest-exch" class="sub">3.3 Sent Exchange</a>
+  <a href="#contest-run" class="sub">3.4 比赛中操作</a>
+  <a href="#contest-cabrillo" class="sub">3.5 生成 Cabrillo</a>
+  <div class="sep"></div>
+  <a href="#multi">4. 多地点共用一套日志</a>
+  <a href="#multi-scenarios" class="sub">4.1 三种场景</a>
+  <a href="#multi-network" class="sub">4.2 多机联网</a>
+  <a href="#multi-split" class="sub">4.3 按地点拆分</a>
+  <a href="#multi-rules" class="sub">4.4 规则与红线</a>
+  <div class="sep"></div>
+  <a href="#lotw">5. 签名并上传 ARRL LoTW</a>
+  <a href="#lotw-concept" class="sub">5.1 四个核心概念</a>
+  <a href="#lotw-cert" class="sub">5.2 申请呼号证书</a>
+  <a href="#lotw-loc" class="sub">5.3 创建 Station Location</a>
+  <a href="#lotw-export" class="sub">5.4 从 N1MM 导出 ADIF</a>
+  <a href="#lotw-sign" class="sub">5.5 TQSL 签名与上传</a>
+  <a href="#lotw-multi" class="sub">5.6 多地点签名策略</a>
+  <a href="#lotw-verify" class="sub">5.7 验证与续期</a>
+  <div class="sep"></div>
+  <a href="#faq">6. 常见问题 FAQ</a>
+  <a href="#ai">7. DeepSeek AI 助手</a>
+  <a href="#sources">8. 官方资料与下载</a>
+</aside>
+
+<main>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <span class="badge blue" id="heroBadge">正在检测本机 N1MM…</span>
+  <h1>N1MM Logger+ <span>从初次设置到 ARRL LoTW 上传</span></h1>
+  <p class="lead">一份面向中文使用者的实践指南：建立数据库与日志、配置电台、设置比赛交换信息、在不同地点/多台电脑共用同一套日志，生成 Cabrillo，并用 TQSL 签名上传到 ARRL Logbook of The World（LoTW）。内容对照 N1MM 官方文档与 ARRL 官方说明整理，页面右下角内置 DeepSeek AI 助手，可就具体问题继续追问。</p>
+  <div class="row">
+    <a class="btn primary" href="#start">① 开始初次设置</a>
+    <a class="btn" href="#contest">② 比赛日志设置</a>
+    <a class="btn" href="#multi">③ 多地点使用</a>
+    <a class="btn" href="#lotw">④ TQSL / LoTW 上传</a>
+    <button class="btn ghost" id="openChatHero">🤖 问 AI 助手</button>
+  </div>
+  <div class="meta">
+    <span class="badge">页面更新：2026-10-06</span>
+    <span class="badge green">DeepSeek API 支持浏览器直连（已实测 CORS）</span>
+    <span class="badge amber">API Key 只保存在你自己的浏览器里</span>
+  </div>
+</div>
+
+<!-- ================= 本机环境 ================= -->
+<section id="about">
+  <div class="sec-head"><span class="num">00</span><div><h2>本机环境与使用说明</h2><p>这些信息由页面启动时自动检测，用于让下面的路径与菜单说明贴合你安装的版本。</p></div></div>
+
+  <div class="card">
+    <div class="row" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+      <button class="btn small primary" id="btnDetect" type="button">🔄 重新检测本机</button>
+      <span class="badge" id="detectState">检测中…</span>
+      <a class="btn ghost small" href="?demo=1">演示模式（通用示例数据）</a>
+    </div>
+    <div class="spec" id="envSpec">
+      <div class="item"><div class="k">N1MM Logger+</div><div class="v" data-env="n1mmVersion">检测中…</div></div>
+      <div class="item"><div class="k">程序目录</div><div class="v" data-env="installDir">检测中…</div></div>
+      <div class="item"><div class="k">用户数据目录</div><div class="v" data-env="dataDir">检测中…</div></div>
+      <div class="item"><div class="k">数据库</div><div class="v" data-env="databases">检测中…</div></div>
+      <div class="item"><div class="k">呼号</div><div class="v" data-env="operator">检测中…</div></div>
+      <div class="item"><div class="k">TQSL</div><div class="v" data-env="tqsl">检测中…</div></div>
+    </div>
+    <div id="envGuidance" class="grid c2" style="margin-top:14px"></div>
+  </div>
+
+  <div class="card" id="profileCard">
+    <h3 style="margin-top:0">个性化信息（可手动补充）</h3>
+    <p class="hint">自动检测不到的字段可以在这里手填；内容只保存在你的浏览器里，用于让教程示例和 AI 回答更贴合你。</p>
+    <div class="grid c3">
+      <div class="field"><label for="profileCall">你的呼号</label><input type="text" id="profileCall" placeholder="例如 XX1XX" autocomplete="off"></div>
+      <div class="field"><label for="profileGrid">网格（可选）</label><input type="text" id="profileGrid" placeholder="例如 PM01aa" autocomplete="off"></div>
+      <div class="field"><label for="profileContest">常参加的比赛（可选）</label><input type="text" id="profileContest" placeholder="例如 ARRL DX CW、CQWW" autocomplete="off"></div>
+    </div>
+    <label class="switch"><input type="checkbox" id="useEnvInAI" checked><span>允许 AI 使用本机检测信息（版本/目录/呼号/网格）来个性化回答</span></label>
+    <p class="hint" style="margin-top:6px">不会发送 QSO 内容、数据库内容、TQSL 私钥或证书；目录会以 <code>~</code> 代替用户名。</p>
+  </div>
+
+  <div class="callout note" id="envFallback"><b>自动检测说明：</b>请通过 <code>启动网站.bat</code>（Windows）或 <code>start.sh</code>（macOS/Linux）以 <code>http://127.0.0.1</code> 打开本页；本地服务器会调用 <code>/api/detect</code> 自动识别你的 N1MM 版本、安装目录、数据目录、数据库与 TQSL 状态。若直接以 <code>file://</code> 双击打开，浏览器禁止网页读取本机路径，此时会显示通用路径并提示你手动填写。检测结果只在本机使用，不会上传。</div>
+
+  <div class="grid c3">
+    <div class="mini"><h4>🖱️ 怎么用本页</h4><p>第一次使用按 ①→②→③→④ 顺序阅读；有具体疑问时点右下角 AI 助手直接提问，例如“ARRL DX CW 的 Sent Exchange 怎么填？”</p></div>
+    <div class="mini"><h4>🧭 菜单写法</h4><p><code>File &gt; Export &gt; Export ADIF to file…</code> 表示从 N1MM 主窗口（录入窗口）的 File 菜单依次点选。不同版本菜单文字可能略有差异。</p></div>
+    <div class="mini"><h4>🔐 先做备份</h4><p>动手改数据库、换电脑、升级前，先关闭 N1MM，把整个 <code>Documents\N1MM Logger+</code> 目录复制一份。数据库损坏时这比什么都管用。</p></div>
+  </div>
+</section>
+
+<!-- ================= 1. 初次设置 ================= -->
+<section id="start">
+  <div class="sec-head"><span class="num">01</span><div><h2>初次设置：从安装到能记第一条 QSO</h2><p>N1MM Logger+ 官方文档把“第一次使用”拆成：安装 → 认识用户文件 → 新建数据库 → 新建日志 → 配置台站与电台 → 测试。</p></div></div>
+
+  <h3 id="start-install">1.1 安装与升级</h3>
+  <div class="steps">
+    <div class="step"><h4>从官方站点下载完整安装包</h4><p>下载地址见文末<a href="#sources">官方资料</a>：N1MM+ 官网的 <b>Full Install</b>。完整安装包包含程序与运行库；之后的小版本更新只需下载 Latest Update。</p></div>
+    <div class="step"><h4>先安装完整版，再安装最新更新</h4><p>官方推荐顺序：Full Install → 最新 Update。安装程序会覆盖程序目录，但<b>不会删除用户数据目录</b>里的数据库与配置。</p></div>
+    <div class="step"><h4>升级前关闭 N1MM 并备份数据</h4><p>关闭程序后，复制 <code data-env="dataDir">用户数据目录</code>。再运行更新程序，最后重新启动 <code>N1MMLogger.net.exe</code>。</p></div>
+  </div>
+  <div class="callout warn"><b>不要用“绿色版/汉化补丁”覆盖官方程序目录：</b>若确实需要中文界面，优先使用官方 Localization 机制或官方发布的语言文件；替换 DLL/EXE 可能导致数据库或联网功能异常。</div>
+
+  <h3 id="start-dirs">1.2 分清两个目录：程序目录与用户数据目录</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>目录</th><th>本机路径</th><th>放什么 / 要不要备份</th></tr></thead>
+    <tbody>
+      <tr><td><b>程序目录</b></td><td><code data-env="installDir">程序目录</code></td><td>EXE、DLL、驱动、示例文件。升级会覆盖，<b>不要把自己的日志放这里</b>。一般不用备份。</td></tr>
+      <tr><td><b>用户数据目录</b></td><td><code data-env="dataDir">用户数据目录</code></td><td>数据库、比赛日志、导出文件、功能键消息、Call History、皮肤等。<b>必须备份</b>。</td></tr>
+      <tr><td>Databases</td><td><code>…\Databases\*.s3db</code></td><td>SQLite 数据库；一个数据库里可以放很多份比赛/日常日志。核心资产。</td></tr>
+      <tr><td>ExportFiles</td><td><code>…\ExportFiles\</code></td><td>ADIF、Cabrillo（.LOG）、通用导出文件的默认输出位置。</td></tr>
+      <tr><td>FunctionKeyMessages</td><td><code>…\FunctionKeyMessages\</code></td><td>F1–F12 的 CW/SSB/数字模式消息文件。</td></tr>
+      <tr><td>CallHistoryFiles</td><td><code>…\CallHistoryFiles\</code></td><td>比赛 Call History（呼号历史）文件，用于自动带出交换信息。</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout tip"><b>一句话记忆：</b>程序目录出问题可以重装；用户数据目录丢了，通联记录就没了。<b>备份只认用户数据目录。</b></div>
+
+  <h3 id="start-db">1.3 新建一个属于你的数据库</h3>
+  <p>N1MM+ 用“数据库 → 日志”的两层结构：一个 <code>.s3db</code> 数据库像一个文件柜，里面可以放很多份“日志（Log）”，每份日志通常对应一次比赛或一类日常记录。</p>
+  <div class="steps">
+    <div class="step"><h4>启动 N1MM Logger+</h4><p>双击桌面快捷方式，或运行 <code data-env="installDir">N1MM 程序目录</code> 下的 <code>N1MMLogger.net.exe</code>。若弹出“选择数据库”，先选系统数据库之一也能进入主界面。</p></div>
+    <div class="step"><h4>File &gt; New Database…</h4><p>在录入窗口的 <b>File</b> 菜单选择 <b>New Database</b>。程序会打开用户数据目录下的 <code>Databases\</code> 目录。</p></div>
+    <div class="step"><h4>给数据库起名</h4><p>例如 <code>MyCall-DX.s3db</code>（把 MyCall 换成你的呼号）。建议只用英文/数字/短横线，避免中文路径带来的老版本兼容问题。保存后程序会自动切换到新数据库。</p></div>
+    <div class="step"><h4>以后打开它</h4><p>再次启动时用 <b>File &gt; Open Database…</b> 选择它；或直接 <b>File &gt; Open Log in Database…</b>，在对话框里切换到该数据库下的某份日志。</p></div>
+  </div>
+  <div class="callout note"><b>数据库 vs 日志：</b>不要为每个 QSO 建数据库。推荐做法：<b>一个个人数据库</b>，里面按比赛/用途建多份日志；跨数据库查找不方便时才考虑拆分。数据库文件可在多台电脑间复制，但同一时间只应有一台电脑打开同一个文件（详见第 4 节）。</div>
+
+  <h3 id="start-log">1.4 建立第一份日志：Contest Setup 对话框</h3>
+  <p>新建数据库后，用 <b>File &gt; New Log in Database: 你的数据库名</b> 创建日志。弹出的 <b>Contest Setup</b>（比赛设置）对话框是 N1MM 的核心设置入口，日常记录和正式比赛都用它。</p>
+  <div class="steps">
+    <div class="step"><h4>选择 Log Type（比赛/日志类型）</h4><p>点开 <b>Log Type</b> 下拉框，按缩写选择。做正式比赛时务必选对比赛名，它决定计分、重复台判定、交换信息格式和 Cabrillo 输出。不确定时点 <b>Show Setup</b> 查看 N1MM 官方设置页，点 <b>Show Rules</b> 打开主办方规则。</p></div>
+    <div class="step"><h4>确认起止日期与时间</h4><p>新日志默认给你下周同一时间。比赛必须按规则填写；日常日志可用默认值或自定。N1MM 内部统一用 UTC 记录 QSO 时间。</p></div>
+    <div class="step"><h4>填写类别（Category）</h4><p>操作员类别、波段、功率、模式、叠加类别（Overlay）、台站类别、是否 Assisted、发射机数量等。它们会直接写进 Cabrillo 头部，比赛前必须核对。</p></div>
+    <div class="step"><h4>填写 Sent Exchange（我发出的交换信息）</h4><p>只填“你固定要发给对方的交换内容”（如州/省、CQ 分区、序列号起始值、功率等）。<b>不要把 59/599 信号报告写进去</b>——信号报告应放在 F 键消息里。</p></div>
+    <div class="step"><h4>Operators（操作员）与 Associated Files</h4><p>填本站呼号/操作员呼号；可选绑定 Call History 文件、功能键消息文件、分区列表等。多操作员时可设置每人独立的功能键消息。</p></div>
+  </div>
+  <div class="callout warn"><b>比赛开始后不要再改 Log Type：</b>一旦开始正式日志，改比赛类型会破坏计分与 Cabrillo。若选错，建议新建一份正确日志并把已记录的 QSO 重新导入/录入，而不是硬改。</div>
+
+  <h3 id="start-station">1.5 台站数据：呼号、网格、分区必须与 LoTW 一致</h3>
+  <p>路径：<b>Config &gt; Change Your Station Data</b>。这里是所有日志共用的“我是谁、我在哪”，会影响交换信息猜测、Cabrillo 头部和 LoTW 上传的正确性。</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>字段</th><th>怎么填</th><th>为什么重要</th></tr></thead>
+    <tbody>
+      <tr><td>Call</td><td>本次操作使用的台站呼号（可能是主呼号，也可能是 /P、/M、特殊事件呼号）</td><td>Cabrillo 与 LoTW 的台站呼号；必须与 TQSL 的 Callsign Certificate / Station Location 一致</td></tr>
+      <tr><td>Grid Square</td><td>4 位或 6 位梅登海德网格，例如 <code>PM01aa</code>（用网格查询工具确认你的实际网格）</td><td>VUCC、卫星、VHF/UHF 奖励；TQSL 里也要填同一个网格</td></tr>
+      <tr><td>State / Province</td><td>WAS/WPX 等需要的州/省</td><td>影响对方的水/陆地与分区奖励</td></tr>
+      <tr><td>CQ Zone / ITU Zone</td><td>按位置填写（N1MM 可自动定位）</td><td>比赛交换信息、LoTW 位置信息</td></tr>
+      <tr><td>DXCC Entity / Continent</td><td>按台站所在地填写</td><td>决定 DXCC 归属与 LoTW 匹配</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout danger"><b>多地点操作的核心：</b>换了物理位置（哪怕呼号不变），<b>都要更新 Station Data 里的网格/州/分区</b>；在 TQSL 里也要为这个位置单独建一个 <b>Station Location</b>。否则 LoTW 可能接受 QSO 但无法给对方正确奖励学分，甚至匹配失败。</div>
+
+  <h3 id="start-config">1.6 配置电台、端口、音频与数字模式</h3>
+  <p>入口：<b>Config &gt; Configure Ports, Mode Control, Audio, Other…</b>（即官方文档中的 <b>The Configurer</b>）。这是 N1MM 最复杂的对话框，按标签页理解就不难：</p>
+  <div class="grid c2">
+    <div class="mini"><h4>Hardware（硬件）</h4><p>Radio 1/2 型号与 COM 端口、波特率；CW/PTT/FSK 端口；SO2R 控制器；旋转器；天线切换等。没有接的设备，端口一律保持 <b>None</b>。</p></div>
+    <div class="mini"><h4>Audio（音频）</h4><p>声卡输入/输出、录音、数字模式音频路由、SSB 语音键控等。数字模式需要把电台与声卡正确对接。</p></div>
+    <div class="mini"><h4>Other（其他）</h4><p>Telnet 集群、Call History、分数显示、界面语言、UDP 广播、外部程序接口等。</p></div>
+    <div class="mini"><h4>WSJT / JTDX</h4><p>WSJT-X / JTDX / JTAlert 的 UDP/TCP 端口与启用开关。默认 WSJT-X/JTAlert UDP 端口是 <code>2333</code>，JTDX TCP 端口是 <code>52001</code>。</p></div>
+  </div>
+  <div class="steps">
+    <div class="step"><h4>先只配 Radio 1</h4><p>选对电台型号与 COM 口；能读频率、能切波段就算通。双电台/SO2R 之后再配 Radio 2。</p></div>
+    <div class="step"><h4>配置 CW / PTT（如需要）</h4><p>用 Winkeyer、串口或并口键控。官方建议优先使用 Winkeyer 类硬件键控，稳定性最好。</p></div>
+    <div class="step"><h4>配置音频（SSB/数字）</h4><p>在 Audio 标签选择收发声卡。数字模式还要在 <b>Config &gt; Digital Modes</b> 或对应数字窗口中选择 MMTTY/MMVARI/Fldigi/WSJT-X 接口。</p></div>
+    <div class="step"><h4>Telnet 集群（可选但推荐）</h4><p>Configurer 的 Other 或 Telnet 窗口里添加集群地址，看得到 spots 才能用 Bandmap/Available Mults 等比赛利器。</p></div>
+  </div>
+
+  <h3 id="start-check">1.7 第一次使用验收清单</h3>
+  <div class="grid c2">
+    <div class="mini"><h4>✅ 结构</h4><p>已有自己的数据库；数据库下已有一份测试日志；<code>Databases</code> 目录里能看到对应 <code>.s3db</code>。</p></div>
+    <div class="mini"><h4>✅ 台站</h4><p>Config &gt; Change Your Station Data 中的呼号、网格、州、CQ/ITU 分区正确。</p></div>
+    <div class="mini"><h4>✅ 电台</h4><p>转动电台旋钮时 N1MM 频率能同步；用软件能切波段/模式。</p></div>
+    <div class="mini"><h4>✅ 记录</h4><p>在录入窗口随便记一条测试 QSO（呼号 + 交换 + Enter），能在 Log 窗口看到、能删除。</p></div>
+    <div class="mini"><h4>✅ 消息</h4><p>按 F1–F12 能看到发送内容；CW/SSB 消息适合你的比赛。</p></div>
+    <div class="mini"><h4>✅ 备份</h4><p>关闭程序，复制整个 <code data-env="dataDir">用户数据目录</code> 到一个安全位置。</p></div>
+  </div>
+</section>
+
+<!-- ================= 2. 日常记录 ================= -->
+<section id="daily">
+  <div class="sec-head"><span class="num">02</span><div><h2>日常使用：记录、查看与修改 QSO</h2><p>不用比赛时，N1MM Logger+ 也完全可以作为日常日志软件使用；理解录入窗口与几个常用窗口即可。</p></div></div>
+
+  <h3 id="daily-entry">2.1 录入窗口（Entry Window）就是主界面</h3>
+  <p>所有操作都从 <b>Entry Window</b> 开始。典型记录流程：</p>
+  <div class="steps">
+    <div class="step"><h4>输入对方呼号</h4><p>在 <b>Call</b> 框输入呼号；N1MM 会做重复台检查（Dupe）、呼号检查（Check）并显示分区/历史信息。</p></div>
+    <div class="step"><h4>输入交换信息</h4><p>填写 RST/RS、分区、州/省、序列号等比赛交换字段。字段名会随比赛类型变化。</p></div>
+    <div class="step"><h4>按 Enter / 空格记入日志</h4><p>默认 <kbd>Enter</kbd> 记录并清空；<kbd>Space</kbd> 在 ESM（Enter Sends Message）模式下会同时发送对应消息。具体键位可在 Configurer 中调整。</p></div>
+    <div class="step"><h4>需要改台站/操作员时</h4><p>用 <kbd>Ctrl</kbd>+<kbd>O</kbd> 或输入 <code>OPON</code> 切换操作员；多操作员时每人的功能键消息可以独立。</p></div>
+  </div>
+  <div class="callout tip"><b>先点“Show Setup”再比赛：</b>Contest Setup 对话框里的 <b>Show Setup</b> 会打开 N1MM 官方对应该比赛的设置说明，是最快的“照着填”资料。</div>
+
+  <h3 id="daily-windows">2.2 值得打开的常用窗口</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>窗口</th><th>作用</th><th>什么时候用</th></tr></thead>
+    <tbody>
+      <tr><td>Log Window</td><td>查看本次日志全部 QSO；右键可显示/隐藏列、编辑 QSO</td><td>核对、改错、统计</td></tr>
+      <tr><td>Check Window</td><td>输入呼号时的呼号检查与历史提示</td><td>减少抄错呼号</td></tr>
+      <tr><td>Bandmap</td><td>把 Telnet spots 画到频率轴上，点击即可跳频</td><td>比赛找台/找系数</td></tr>
+      <tr><td>Telnet Window</td><td>连接 DX Cluster，收发 spots</td><td>比赛与日常追台</td></tr>
+      <tr><td>Available Mults &amp; Qs</td><td>列出还没通的系数台/需要的台</td><td>比赛冲系数</td></tr>
+      <tr><td>Multipliers / Statistics</td><td>系数与统计</td><td>比赛中期查看成绩</td></tr>
+      <tr><td>Network Status</td><td>多机联网状态、Station Name、网络消息</td><td>多操作员/多电脑</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 id="daily-keys">2.3 常用快捷键与消息</h3>
+  <div class="grid c2">
+    <div class="mini"><h4>记录与编辑</h4><p><kbd>Enter</kbd> 记入日志 · <kbd>Space</kbd> ESM 发送 · <kbd>Ctrl</kbd>+<kbd>O</kbd> 切换操作员 · <kbd>Ctrl</kbd>+<kbd>E</kbd> 与网络台站对话</p></div>
+    <div class="mini"><h4>功能键 F1–F12</h4><p>在 Function Key Editor 中编辑；CW/SSB/数字模式各有独立消息文件。比赛中交换信息通常写在 F2/F3 等键里。</p></div>
+    <div class="mini"><h4>宏（Macros）</h4><p>消息中可用 <code>{EXCH}</code>、<code>{CALL}</code>、<code>{SENTRST}</code> 等宏自动带入当前 QSO 内容，避免手输错误。</p></div>
+    <div class="mini"><h4>窗口与显示</h4><p>用 Window 菜单或热键打开 Bandmap、Check、Mults 等窗口；皮肤/颜色/字体在 Config &gt; Change Skins, Colors and Fonts 中调整。</p></div>
+  </div>
+
+  <h3 id="daily-edit">2.4 修改、查找与批量处理 QSO</h3>
+  <ul>
+    <li><b>改单条：</b>在 Log Window 中找到该行，右键 → <b>Edit QSO</b>（或对应编辑命令），修改后保存。已有重复台/时间问题时先查清楚再改。</li>
+    <li><b>模式显示：</b>若 Log 窗口看不到模式列，右键 → 勾选 <b>Show Mode</b>，再按模式列排序即可找出错记模式的 QSO。</li>
+    <li><b>时间错误：</b>官方文档提供了“单条改时间/日期”“批量改时间”“整体平移时间”等命令，比赛后修正时钟偏差很有用。</li>
+    <li><b>补录：</b>比赛后可以继续手工补录 QSO；补录前后注意重复台与时间顺序。</li>
+    <li><b>删除：</b>删除的 QSO 默认不会出现在 ADIF 导出中；如需导出已删除记录，官方说明可选择 <code>DELETEDQS</code> 日志类型。</li>
+  </ul>
+
+  <h3 id="daily-backup">2.5 备份与恢复：只做一件事也请做它</h3>
+  <div class="steps">
+    <div class="step"><h4>关闭 N1MM</h4><p>确保程序完全退出，数据库文件不被占用。</p></div>
+    <div class="step"><h4>复制整个用户数据目录</h4><p>把 <code data-env="dataDir">用户数据目录</code> 复制到移动硬盘/网盘/另一台电脑，按日期命名，例如 <code>N1MM-backup-2026-10-06</code>。</p></div>
+    <div class="step"><h4>恢复时整目录还原</h4><p>把备份目录复制回 <code>Documents\</code>，再启动 N1MM。若只想恢复某次比赛，也可以只复制对应的 <code>.s3db</code> 文件。</p></div>
+  </div>
+  <div class="callout warn"><b>不要在 N1MM 运行时用云盘同步 <code>.s3db</code>：</b>OneDrive/Dropbox 的同步可能复制出冲突文件或损坏数据库。要同步，先关闭程序，同步完成后再在另一台机器打开。</div>
+</section>
+
+<!-- ================= 3. 比赛设置 ================= -->
+<section id="contest">
+  <div class="sec-head"><span class="num">03</span><div><h2>比赛日志设置：从选对 Log Type 到生成 Cabrillo</h2><p>比赛日志的关键不是“记下呼号”，而是让 N1MM 知道<b>这是什么比赛、你报什么类别、交换什么信息</b>，这样计分、重复台判定和 Cabrillo 头部才会正确。</p></div></div>
+
+  <div class="flow">
+    <div class="node"><b>① 新建日志</b><small>File &gt; New Log in Database</small></div><div class="arrow">→</div>
+    <div class="node"><b>② 选 Log Type</b><small>Show Setup / Show Rules</small></div><div class="arrow">→</div>
+    <div class="node"><b>③ 填 Category</b><small>操作员/波段/功率/模式…</small></div><div class="arrow">→</div>
+    <div class="node"><b>④ 填 Sent Exchange</b><small>不要写 599</small></div><div class="arrow">→</div>
+    <div class="node hot"><b>⑤ 赛后 Cabrillo</b><small>Rescore → Generate</small></div>
+  </div>
+
+  <h3 id="contest-new">3.1 第一步：选对比赛类型（Log Type）</h3>
+  <div class="steps">
+    <div class="step"><h4>用对手册确认比赛缩写</h4><p>例如 CQWW CW、ARRL DX CW、ARRL Field Day、CQ WPX SSB、IARU HF、NAQP、Sprint、VHF/UHF 比赛等。N1MM 的 <b>Log Type</b> 下拉框按缩写排列，可输入首字母快速跳转。</p></div>
+    <div class="step"><h4>点 Show Rules 与 Show Setup</h4><p><b>Show Rules</b> 打开主办方规则；<b>Show Setup</b> 打开 N1MM 官方对应该比赛的中文/英文设置说明。先看规则，再照 Show Setup 填，比问人快也准确。</p></div>
+    <div class="step"><h4>确认日期与时段</h4><p>比赛日期按规则填写；N1MM 的时间一律是 <b>UTC</b>。若比赛跨日或有多场次（如 NAQP 两次），建议建立独立日志。</p></div>
+    <div class="step"><h4>确认比赛级别/波段限制</h4><p>例如单波段比赛、QRP 比赛、只允许某些模式等。选错类型会导致重复台判定与交换信息全错。</p></div>
+  </div>
+  <div class="callout note"><b>同一台电脑、同一个数据库可以放很多场不同比赛：</b>每场用 File &gt; New Log in Database 新建一份日志即可，比赛互不干扰。不要在同一个日志里混两场比赛。</div>
+
+  <h3 id="contest-cat">3.2 第二步：类别（Category）设置</h3>
+  <p>Contest Setup 的顶部区域会把该比赛的类别选项列出来。常见类别含义如下（不同比赛会裁剪）：</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>类别组</th><th>常见选项</th><th>要点</th></tr></thead>
+    <tbody>
+      <tr><td>Operator</td><td>Single-Op、Single-Op Assisted、Multi-Op、Multi-Single、Multi-Multi、SWL 等</td><td>决定是否可以用 Spot/Cluster；多操作员要额外填 Operators</td></tr>
+      <tr><td>Band</td><td>All Band、Single Band（160/80/40/20/15/10/6m…）</td><td>单波段比赛选错会直接判错组别</td></tr>
+      <tr><td>Power</td><td>QRP、Low Power、High Power</td><td>功率限制按主办方定义（常见 QRP ≤5W、LP ≤100W、HP 更高）</td></tr>
+      <tr><td>Mode</td><td>CW、SSB、Mixed、Digital、RTTY…</td><td>与 Log Type 互相匹配</td></tr>
+      <tr><td>Overlay</td><td>TB-Wires、Classic、Rookie、Youth 等</td><td>仅在比赛支持时出现；影响附加排名</td></tr>
+      <tr><td>Station</td><td>Fixed、Portable、Mobile、Rover、Maritime…</td><td>与你实际台站形态一致；Rover 还要填每个格点的位置</td></tr>
+      <tr><td>Transmitter / Xmitter</td><td>One、Two、Multi…</td><td>SO2R、二发射机等必须如实选择</td></tr>
+      <tr><td>Time</td><td>24-hour、6-hour、12-hour 等</td><td>限时比赛别选错</td></tr>
+      <tr><td>Assisted</td><td>Assisted / Non-Assisted</td><td>使用 DX Cluster/Spot 通常要选 Assisted（除非该比赛另有规定）</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout warn"><b>Category 会写进 Cabrillo：</b>赛后改类别虽然可以重新生成 Cabrillo，但比赛期间用错类别会影响 N1MM 的行为（例如 Assisted 相关限制）。比赛前就把类别核对一遍。</div>
+
+  <h3 id="contest-exch">3.3 第三步：Sent Exchange 与序列号</h3>
+  <p><b>Sent Exchange</b> 只放“你固定发给对方的交换内容”，例如：</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>比赛例子</th><th>Sent Exchange 常见填法</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>CQWW / IARU 等分区交换</td><td><code>05</code>（CQ Zone）或 <code>27</code>（ITU Zone）</td><td>N1MM 常会根据 Station Data 自动猜出</td></tr>
+      <tr><td>ARRL DX（美国/加拿大台）</td><td><code>CT</code> / <code>MA</code> 等州/省缩写</td><td>非美加台通常报功率（如 <code>KW</code>、<code>100</code>）</td></tr>
+      <tr><td>WPX / NA Sprint 等序列号比赛</td><td>起始序列号（如 <code>1</code>）</td><td>“Starting with a Serial Number other than Zero” 可在对话框中设置</td></tr>
+      <tr><td>Field Day</td><td>类别+分区，如 <code>1D</code> + 分区；具体按当年规则</td><td>Class 与 Section 都要正确</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout danger"><b>不要把信号报告写进 Sent Exchange：</b>官方文档特别提醒：若交换是 <code>5NN WV</code>，只把 <code>WV</code> 放进 Sent Exchange，<code>5NN</code> 交给 F 键消息。否则每一条 QSO 的 Cabrillo 都会多出一个信号报告，导致日志被退回。</div>
+  <ul>
+    <li><b>序列号服务器：</b>多机比赛时可由一台电脑作为序列号服务器，保证同一波段/模式序列号不重复（官方文档 "Using a Serial Number Server"）。</li>
+    <li><b>分区列表 / Section List：</b>在 Associated Files 中绑定，可帮助检查交换信息是否合法。</li>
+    <li><b>Call History：</b>绑定后输入呼号可自动带出对方历史交换（如州、分区、姓名），显著减少录入错误。</li>
+  </ul>
+
+  <h3 id="contest-run">3.4 比赛中：把 N1MM 当“副驾驶”用</h3>
+  <div class="grid c2">
+    <div class="mini"><h4>Running / S&amp;P</h4><p>用 F1 呼叫 CQ（Running）；输入呼号后按空格/回车（S&amp;P）。ESM 模式会让你只按空格就按顺序发送正确消息。</p></div>
+    <div class="mini"><h4>重复台与系数</h4><p>录入时呼号框颜色/Check 窗口会提示 Dupe；Available Mults &amp; Qs 与 Multipliers 窗口帮你找系数。</p></div>
+    <div class="mini"><h4>Bandmap + Telnet</h4><p>Cluster spots 显示在频率轴上；点击即跳频，常用颜色区分需要/不需要的台。</p></div>
+    <div class="mini"><h4>SO2R / SO2V</h4><p>两电台或单机双 VFO 操作时，先按官方 Setup 文档配置 Radio 1/2、音频与切换，再在比赛中使用。</p></div>
+    <div class="mini"><h4>CW / SSB 消息</h4><p>把常用交换写成 F 键消息，用 <code>{EXCH}</code>、<code>{CALL}</code> 等宏自动替换；比赛中不要靠手打。</p></div>
+    <div class="mini"><h4>数字模式</h4><p>RTTY/PSK 用 MMTTY/MMVARI；FT8/FT4 通过 WSJT-X UDP 把 QSO 自动送入当前日志（需在 Configurer 的 WSJT/JTDX 标签启用）。</p></div>
+  </div>
+
+  <h3 id="contest-cabrillo">3.5 赛后：计分、生成 Cabrillo、提交</h3>
+  <div class="steps">
+    <div class="step"><h4>先保护数据</h4><p>关闭程序并复制数据库；再打开比赛日志操作。官方文档把“赛后保护数据”放在第一节不是没有原因的。</p></div>
+    <div class="step"><h4>Tools &gt; Rescore Current Contest</h4><p>按当前比赛规则重新计分，确认 Claimed Score、系数、重复台数量合理。</p></div>
+    <div class="step"><h4>File &gt; Generate Cabrillo File</h4><p>N1MM 会生成 <code>你的呼号.LOG</code>，默认放在用户数据目录的 <code>ExportFiles\</code>，也可另存。</p></div>
+    <div class="step"><h4>检查 Cabrillo 头部</h4><p>用记事本打开 .LOG，核对：<code>CALLSIGN</code>、<code>CONTEST</code>、<code>CATEGORY-*</code>、<code>CLAIMED-SCORE</code>、<code>OPERATORS</code>、<code>NAME</code>、<code>ADDRESS</code> 等。官方提示：某些比赛要求手动编辑 <code>LOCATION</code> 行来标明你的位置。</p></div>
+    <div class="step"><h4>按主办方要求提交</h4><p>多数比赛通过网页上传 Cabrillo；也有比赛接受邮件附件。提交后保留一份 .LOG 与 ADIF 备份。</p></div>
+  </div>
+  <div class="callout note"><b>要交 LoTW 的话，Cabrillo 不是给 LoTW 用的：</b>LoTW 用 ADIF（TQSL 也可读 Cabrillo，但推荐 ADIF）。比赛提交用 Cabrillo；LoTW 用第 5 节导出的 ADIF。</div>
+
+  <h4>比赛设置常见错误</h4>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>症状</th><th>常见原因</th><th>处理</th></tr></thead>
+    <tbody>
+      <tr><td>Cabrillo 被退回，提示交换信息错误</td><td>Sent Exchange 里多写了 599/5NN，或格式与规则不符</td><td>改 Sent Exchange → 重新 Rescore → 重新 Generate</td></tr>
+      <tr><td>分数明显偏低</td><td>Log Type 选成相近但不同的比赛；分区/州填错</td><td>核对 Show Setup 与比赛规则；必要时新建正确日志导入 ADIF</td></tr>
+      <tr><td>重复台判定异常</td><td>同一份日志里混了两场比赛，或中途改了 Log Type</td><td>拆成独立日志；不要中途改类型</td></tr>
+      <tr><td>提交时 CATEGORY 不对</td><td>比赛前类别选错，赛后未核对</td><td>在 Contest Setup 改正类别后重新生成 Cabrillo</td></tr>
+      <tr><td>LOCATION 行缺失/不对</td><td>多地点、Rover、DX 远征等需要标明位置</td><td>按主办方说明手动编辑 .LOG 的 LOCATION 行</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ================= 4. 多地点 ================= -->
+<section id="multi">
+  <div class="sec-head"><span class="num">04</span><div><h2>在不同地点使用同一套日志</h2><p>这是最容易出错的部分。先分清“不同时间在不同地点”和“多台电脑同时操作”两种场景，处理方式完全不同。</p></div></div>
+
+  <h3 id="multi-scenarios">4.1 三种典型场景与推荐做法</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>场景</th><th>典型情况</th><th>推荐做法</th><th>注意</th></tr></thead>
+    <tbody>
+      <tr><td><b>A. 同一套设备，不同时间换地点</b></td><td>平时在家，周末去 /P、俱乐部台或朋友家操作；呼号可能不变或加 /P</td><td>继续用<b>同一个数据库</b>；每个地点/每次活动<b>新建一份 Log</b>；换地点时更新 Config &gt; Change Your Station Data；导出后按地点分别签 LoTW</td><td>不要在两台电脑同时打开同一个 .s3db；换地点必须同步改网格/州/分区</td></tr>
+      <tr><td><b>B. 多台电脑同时操作</b></td><td>Multi-Op / 多机单操作员 / 俱乐部台，多台电脑同场</td><td>用 N1MM 的 <b>Network</b> 联网，所有机器共享同一个比赛日志；每台机设置唯一的 <b>Station Name</b>；用一个 Master 数据库</td><td>版本、比赛类型、Log Type 必须一致；ADIF 可按 Station Name 拆分</td></tr>
+      <tr><td><b>C. 分布式 / 远程台站</b></td><td>IARU HQ、特殊事件台、VPN 连接的多地台站</td><td>通过固定 IP 或 VPN 把各台站接入同一个 N1MM 网络；遵守该比赛的分布式类别规则</td><td>比赛规则可能限制地点/分区/信号数量；先读规则再动手</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout note"><b>判断口诀：</b>“同一时间是不是有多台电脑在写？” 是 → 走网络模式（场景 B/C）；否 → 一个数据库、多份日志、按地点更新台站数据（场景 A）。</div>
+
+  <h3 id="multi-network">4.2 场景 B：多台电脑联网共用一份比赛日志</h3>
+  <p>N1MM Logger+ 的网络功能会自动发现同一子网内运行相同版本、相同比赛的电脑，典型的家庭/俱乐部局域网不需要手填 IP。官方文档《Multi-Computer and Multi-Op Contesting》与《The Network Status Window》是权威依据。</p>
+  <div class="steps">
+    <div class="step"><h4>统一版本与比赛设置</h4><p>所有电脑安装<b>相同版本</b>的 N1MM+；打开<b>同一比赛类型</b>（Log Type 一致）的日志；类别（Category）、多操作类别也要一致，否则网络会警告。</p></div>
+    <div class="step"><h4>把电脑接到同一个局域网</h4><p>同一个路由器/交换机下；推荐用有线或稳定 Wi-Fi。典型家庭网是同一子网（如 192.168.1.x）。</p></div>
+    <div class="step"><h4>在其中一台机器上启用网络</h4><p>在录入窗口打开 <b>Config &gt; Network</b>（或 Configurer 的 Network 标签）启用联网；其他电脑同样开启。程序会自动发现并连接，Network Status 窗口会显示在线台站。</p></div>
+    <div class="step"><h4>给每台机设置唯一的 Station Name</h4><p>在 <b>Network Status Window</b> 中为每台电脑设置不同的 Station Name（例如 <code>RUN1</code>、<code>MULT</code>、<code>INBAND</code>）。这个名字会随 QSO 记录保存，也是之后按台站导出 ADIF 的依据。</p></div>
+    <div class="step"><h4>确定数据库与日志</h4><p>所有电脑打开同一份比赛日志（推荐一台作为主库，其余通过网络同步）。不要在两台机各自建同名日志后再指望自动合并。</p></div>
+    <div class="step"><h4>测试后再开机比赛</h4><p>在一台机记一条测试 QSO，确认另一台的 Log/Network 窗口立刻看到；测试完删除。检查 Ctrl+E “Talk to Another Station” 网络聊天是否可用。</p></div>
+  </div>
+  <div class="grid c2">
+    <div class="mini"><h4>跨网段 / 互联网（场景 C）</h4><p>官方文档给出两种方式：直接指定外部台站的 IP/端口，或让所有台站接入同一个 VPN（文档提到 SoftEther、Hamachi 等方案）。需要处理防火墙端口放行。</p></div>
+    <div class="mini"><h4>多操作员的语音/消息</h4><p>每个操作员可用 <kbd>Ctrl</kbd>+<kbd>O</kbd> 或 <code>OPON</code> 登录；若启用 Per Operator Function Key Messages，每位操作员会在各自子目录里保存独立消息文件。</p></div>
+  </div>
+  <div class="callout warn"><b>网络模式不是“共享文件夹”：</b>它是 N1MM 自己的网络协议。把 .s3db 放在网络共享盘上让两台机同时打开，既不是官方多机方案，也极易损坏数据库。</div>
+
+  <h3 id="multi-split">4.3 场景 A：同一数据库、不同地点，如何正确拆分与导出</h3>
+  <p>LoTW/TQSL 的硬性要求：<b>一个将要签名的文件里的所有 QSO 必须属于同一个台站呼号、同一个操作地点</b>。所以“同一套日志”在 N1MM 里可以统一管理，但导出给 TQSL 时要按地点拆分。</p>
+  <div class="steps">
+    <div class="step"><h4>换地点前更新 Station Data</h4><p><b>Config &gt; Change Your Station Data</b>：改成该地点的呼号（含 /P 等）、网格、州/省、CQ/ITU 分区、DXCC 实体。换地点后再改回来，别忘记。</p></div>
+    <div class="step"><h4>给每个地点建独立 Log</h4><p>例如 <code>ARRL-DX-CW-Home</code>、<code>ARRL-DX-CW-Portable</code>。即使呼号相同，只要物理地点不同，就建议分开，导出时天然按地点分流。</p></div>
+    <div class="step"><h4>导出全部或部分 QSO</h4><p>导出全部：<b>File &gt; Export &gt; Export ADIF to file…</b>。只导出部分：先在 <b>Log Window</b> 选中需要的 QSO，再执行导出（N1MM 支持导出选中记录；不同版本菜单文字可能是 “Export ADIF to file” 或带 Selected）。</p></div>
+    <div class="step"><h4>多机环境按 Station Name 导出</h4><p>官方文档提供 <b>Export ADIF to file by Multi-User Station Name</b>：在多用户环境下，按 Station Name 把所有该台站的 QSO 导出为一个 ADIF。先用 Network Status 提供 Station Name，再选文件名。</p></div>
+    <div class="step"><h4>需要合并时用 ADIF 合并</h4><p>官方合并流程：每台记录电脑 <b>File &gt; Export &gt; Export ADIF to file</b>；确认各文件的 <code>CONTEST_ID</code> 完全一致；把 ADIF 汇总后用 <b>File &gt; Import</b> 导入同一份新日志。不要用 Excel/Cabrillo 手工合并，除非你很清楚格式。</p></div>
+  </div>
+  <div class="code-card">
+    <button class="copy" data-copy-target="#code-merge">复制</button>
+    <pre id="code-merge"><code>【多地点的标准工作流示例】
+1) Home 地点：Config &gt; Change Your Station Data → 填入你的实际网格、州/省、CQ/ITU 分区
+   File &gt; New Log in Database → 建立 Home 日志 → 操作并记录
+2) 便携地点：先更新 Station Data 为便携网格/位置
+   File &gt; New Log in Database → 建立 Portable 日志 → 操作并记录
+3) 赛后分别导出：
+   Home 日志   → File &gt; Export &gt; Export ADIF to file… → home.adi
+   Portable 日志 → File &gt; Export &gt; Export ADIF to file… → portable.adi
+4) TQSL 中为两个地点各建一个 Station Location：
+   CALL-Home、CALL-Portable
+5) 分别签名上传：
+   tqsl -d -u -a compliant -l "CALL-Home"    "home.adi"
+   tqsl -d -u -a compliant -l "CALL-Portable" "portable.adi"</code></pre>
+  </div>
+  <div class="callout tip"><b>临时在朋友家操作？</b>也可以继续用你的数据库，但一定要新建一份 Log，并在该 Log 有效期间把 Station Data 改为朋友家的位置。比赛规则是否允许你这样做（例如是否需要 /P、是否算不同台站），以比赛规则为准。</div>
+
+  <h3 id="multi-rules">4.4 规则与红线：这一节能帮你少走很多弯路</h3>
+  <div class="grid c2">
+    <div class="mini"><h4>🚫 一个 TQ8 文件不能混地点</h4><p>ARRL 官方明确：提交给 LoTW 的一个文件中的所有 QSO 必须使用同一个台站呼号和同一个操作地点，才能用同一个 Callsign Certificate 和 Station Location 签名。混了就必须拆分。</p></div>
+    <div class="mini"><h4>🚫 不要把同一 .s3db 放在共享云盘同时打开</h4><p>N1MM 不是并发文件数据库。多机同时写必须走 N1MM 网络；单机换地点可以用复制/备份，但要先关闭程序。</p></div>
+    <div class="mini"><h4>⚠️ 比赛规则优先于软件能力</h4><p>软件能合并日志，不代表比赛允许你跨地点合并成绩。很多比赛规定单操作员的所有 QSO 必须在同一地点完成；Field Day、IARU HQ、Rover、DX 远征等各有特殊规则。</p></div>
+    <div class="mini"><h4>⚠️ LoTW 与比赛提交是两条线</h4><p>LoTW 负责“确认 QSO”；比赛成绩提交用 Cabrillo 给主办方。你可以按地点分别上传 LoTW，但比赛成绩必须按该比赛的规则申报。</p></div>
+  </div>
+  <div class="callout note">权威依据：N1MM 官方《Multi-Computer and Multi-Op Contesting》《The Network Status Window》《Operating a Contest（How to Merge Contest Logs）》；ARRL LoTW 官方《Multiple Callsigns and Operating Locations》《Defining a Station Location》《Submitting QSOs》。链接见文末。</div>
+</section>
+
+<!-- ================= 5. LoTW ================= -->
+<section id="lotw">
+  <div class="sec-head"><span class="num">05</span><div><h2>签名并上传到 ARRL Logbook of The World（LoTW）</h2><p>关键要记住：<b>N1MM 负责产生 ADIF，TQSL 负责用你的呼号证书签名，LoTW 负责接收和确认。</b>N1MM 本身不做数字签名。</p></div></div>
+
+  <h3 id="lotw-concept">5.1 先搞懂四个核心概念</h3>
+  <div class="grid c2">
+    <div class="mini"><h4>1. LoTW Account（LoTW 账户）</h4><p>ARRL 的在线服务账户，用用户名/密码登录，查看已提交、已确认的 QSO，并申请奖项学分。申请呼号证书后 ARRL 会发给你账户密码。</p></div>
+    <div class="mini"><h4>2. Callsign Certificate（呼号证书）</h4><p>由 ARRL 签发、绑定你呼号的数字证书（含私钥），用于证明“这条 QSO 确实由这个呼号提交”。每个呼号一张，有效期 3 年，可续期。</p></div>
+    <div class="mini"><h4>3. Station Location（台站位置）</h4><p>在 TQSL 中定义的操作地点：呼号 + 网格 + ITU/CQ 分区 + IOTA + DXCC 实体 + 州/县等。对方要靠它获得 VUCC/WAS 等奖励学分，必须准确。</p></div>
+    <div class="mini"><h4>4. TQSL 与 .TQ8 文件</h4><p>TQSL 是 ARRL 提供的免费签名/上传工具。它读取 ADIF（或 Cabrillo），用呼号证书签名，生成加密的 <code>.tq8</code> 文件并上传到 LoTW。</p></div>
+  </div>
+  <div class="flow">
+    <div class="node"><b>N1MM 日志</b><small>QSO 数据库</small></div><div class="arrow">→</div>
+    <div class="node"><b>Export ADIF</b><small>File &gt; Export &gt; Export ADIF to file…</small></div><div class="arrow">→</div>
+    <div class="node"><b>TQSL 签名</b><small>选择 Callsign Certificate + Station Location</small></div><div class="arrow">→</div>
+    <div class="node hot"><b>上传 LoTW</b><small>生成 .tq8，等待处理</small></div><div class="arrow">→</div>
+    <div class="node"><b>确认/学分</b><small>对方也上传后才匹配</small></div>
+  </div>
+
+  <h3 id="lotw-cert">5.2 安装 TQSL 并申请呼号证书</h3>
+  <div class="steps">
+    <div class="step"><h4>下载安装 TQSL</h4><p>从 ARRL 官方 <b>TQSL Download</b> 页面下载安装（本页整理时官方最新为 TQSL 2.8.6，支持 Windows/macOS/Linux）。不要从第三方站点下载。</p></div>
+    <div class="step"><h4>在 TQSL 中请求呼号证书</h4><p>打开 TQSL → <b>Callsign Certificate</b> 菜单 → <b>Request New Callsign Certificate</b> → 输入呼号、选择 DXCC 实体、填写姓名/地址/邮箱等，按向导提交。</p></div>
+    <div class="step"><h4>等待 ARRL 处理</h4><p>美国呼号通常按 FCC 数据库自动核对；非美国呼号可能需要提交操作执照等证明文件（官方 "Required Documentation"）。处理完成后 ARRL 会把账户密码和证书发到你的邮箱。</p></div>
+    <div class="step"><h4>在同一台电脑上接受证书</h4><p>官方明确：<b>必须用申请证书的那台电脑接受证书</b>。所以建议指定一台“主控电脑（Master）”，以后申请/续期证书、维护 Station Location 都在这台机器上做。</p></div>
+    <div class="step"><h4>登录 LoTW 账户验证</h4><p>用 ARRL 邮件中的用户名/密码登录 LoTW，确认能查看账户；再回到 TQSL 继续定义台站位置。</p></div>
+  </div>
+  <div class="callout note"><b>证书有效期 3 年：</b>到期前 ARRL 会提前数周发邮件提醒，可在 TQSL 中续期。不要等过期后才处理；过期证书会导致上传被拒绝。</div>
+
+  <h3 id="lotw-loc">5.3 创建 Station Location（每个物理地点一个）</h3>
+  <div class="steps">
+    <div class="step"><h4>TQSL → Station Locations 标签</h4><p>点击 <b>Create a new Station Location</b>，打开 Add Station Location 对话框。</p></div>
+    <div class="step"><h4>选择呼号证书 / DXCC 实体</h4><p>选择对应呼号；若把 Call Sign 设为 <code>[None]</code>，需要勾选允许并选择 DXCC 实体，TQSL 会在上传时按 DXCC 匹配证书。</p></div>
+    <div class="step"><h4>填写网格与分区</h4><p>按官方要求填：Grid Square（4 位或 6 位）、ITU Zone、CQ Zone、IOTA 参考号（如适用）。官方还支持用逗号分隔的多个网格（如移动/多点操作）。</p></div>
+    <div class="step"><h4>填写州/县等奖励信息</h4><p>美国台站按需填 State、County；其他地区按 WAS/VUCC 等奖励要求填写。信息越完整，对方越容易拿到学分。</p></div>
+    <div class="step"><h4>命名并保存</h4><p>建议“呼号+地点”，例如 <code>MYCALL-Home</code>、<code>MYCALL-Portable-GRID</code>。以后签名时用这个名字 <code>-l</code> 指定。</p></div>
+  </div>
+  <div class="callout danger"><b>Station Location 与 N1MM 的 Station Data 必须一致：</b>呼号、网格、分区、州/县/DXCC 实体要对应同一个物理位置。一个 Station Location 只能代表一个地点；多地操作就建多个。</div>
+
+  <h3 id="lotw-export">5.4 从 N1MM 导出 ADIF</h3>
+  <div class="steps">
+    <div class="step"><h4>确认当前日志正确</h4><p>打开要上传的那份比赛/日常日志；确认 Station Data 与 Contest Setup 正确。</p></div>
+    <div class="step"><h4>File &gt; Export &gt; Export ADIF to file…</h4><p>选择保存位置（默认 <code data-env="dataDir">用户数据目录</code> 下的 <code>ExportFiles\</code>）与文件名，例如 <code>arrl-dx-cw-2026.adi</code>。N1MM 官方 FAQ 的 LoTW 答案就是这一条路径。</p></div>
+    <div class="step"><h4>只导出一部分 QSO（可选）</h4><p>先在 <b>Log Window</b> 选中需要的 QSO，再执行导出；多机环境可用 <b>Export ADIF to file by Multi-User Station Name</b> 按台站名导出。</p></div>
+    <div class="step"><h4>核对 ADIF</h4><p>用记事本打开 <code>.adi</code>，确认有 <code>&lt;CALL:...&gt;</code>、<code>&lt;QSO_DATE:...&gt;</code>、<code>&lt;TIME_ON:...&gt;</code>、<code>&lt;BAND:...&gt;</code>、<code>&lt;MODE:...&gt;</code> 等基本字段；LoTW 至少需要对方呼号、UTC 日期时间、波段、模式。</p></div>
+  </div>
+  <div class="callout tip"><b>导出前先 Rescore：</b>虽然不是 LoTW 必需，但比赛后先 Tools &gt; Rescore Current Contest 再导出，能避免分数/系数与最终提交不一致。</div>
+
+  <h3 id="lotw-sign">5.5 用 TQSL 签名并上传</h3>
+  <h4>方式一：图形界面（推荐新手）</h4>
+  <div class="steps">
+    <div class="step"><h4>打开 TQSL</h4><p>选择 <b>Sign a log and upload it automatically to LoTW</b>（或 “Sign an existing ADIF or Cabrillo file”）。</p></div>
+    <div class="step"><h4>选择你的 ADIF 文件</h4><p>选中刚才 N1MM 导出的 <code>.adi</code>。</p></div>
+    <div class="step"><h4>选择 Station Location</h4><p>选择与该批 QSO 的呼号/地点完全一致的 Station Location。TQSL 会显示将使用哪张呼号证书。</p></div>
+    <div class="step"><h4>签名并上传</h4><p>TQSL 生成 <code>.tq8</code> 并上传；屏幕上会显示 “Log uploaded successfully with result ... File queued for processing”。</p></div>
+    <div class="step"><h4>保存 .tq8（可选）</h4><p>若网络不稳定或需要离线签名，可先保存 .tq8，之后再上传或通过其他电脑提交。</p></div>
+  </div>
+
+  <h4>方式二：命令行（适合批处理/多地点分别签名）</h4>
+  <p>TQSL 官方提供命令行接口。核心参数含义：<code>-l</code> 指定 Station Location，<code>-u</code> 签名并上传，<code>-a</code> 选择对重复/超范围 QSO 的处理策略，<code>-x</code> 完成后退出，<code>-d</code> 输出调试信息。官方示例：</p>
+  <div class="code-card">
+    <button class="copy" data-copy-target="#code-tqsl-official">复制</button>
+    <pre id="code-tqsl-official"><code>tqsl -d -u -a new -x -l "CQWW Portable" "cqww log.adi" 2&gt;results.txt</code></pre>
+  </div>
+  <div class="code-card">
+    <button class="copy" data-copy-target="#code-tqsl-common">复制</button>
+    <pre id="code-tqsl-common"><code># 用指定的 Station Location 签名并上传
+tqsl -d -u -a compliant -l "MYCALL-Home" "n1mm-export.adi"
+
+# 只签名保存 .tq8，不立即上传（示例：-u 换成只生成输出文件的方式请查官方 CLI 参考）
+# 输出文件默认与输入文件同名、扩展名为 .tq8</code></pre>
+  </div>
+  <div class="callout warn"><b>参数会随 TQSL 版本变化：</b>执行前请在终端运行 <code>tqsl --help</code>，或查阅官方 <a href="https://lotw.arrl.org/lotw-help/cmdline/" target="_blank" rel="noopener">TQSL Command Line Interface</a>。上面的命令来自 ARRL 官方示例，可直接照抄格式，但站名/文件名要换成你自己的。</div>
+
+  <h3 id="lotw-multi">5.6 多地点 / 多呼号：LoTW 的正确签名策略</h3>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>情况</th><th>需要几张 Callsign Certificate</th><th>需要几个 Station Location</th><th>怎么签</th></tr></thead>
+    <tbody>
+      <tr><td>同一呼号、同一地点</td><td>1 张</td><td>1 个</td><td>直接签</td></tr>
+      <tr><td>同一呼号、多个地点（家 / 便携 / 朋友家）</td><td>1 张</td><td><b>每个地点 1 个</b></td><td>按地点拆 ADIF，分别用对应 Station Location 签</td></tr>
+      <tr><td>不同呼号、同一地点（旧呼号 / 新呼号 / 特殊事件呼号）</td><td><b>每个呼号 1 张</b></td><td>按呼号+地点各建</td><td>按呼号+地点拆 ADIF，分别签</td></tr>
+      <tr><td>DX 远征 / 多地移动</td><td>主呼号证书；多呼号要额外申请</td><td>每个操作地点一个</td><td>按“呼号+地点+日期”拆分；官方 DXpedition 指南建议逐段签</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout danger"><b>ARRL 官方原文要点：</b>提交给 LoTW 的一个文件中的所有 QSO，必须使用同一个台站呼号、同一个操作地点，才能用同一个 Callsign Certificate 与 Station Location 签名。若文件里混了多个呼号或多个地点，必须用日志软件或文本编辑器<b>拆成多个文件</b>，再分别提交。</div>
+  <div class="callout tip"><b>拆分小技巧：</b>N1MM 的多机环境优先用 <b>Export ADIF to file by Multi-User Station Name</b>；同机多地点则建议一开始就按地点分 Log，导出时天然分离，避免事后手工切分 ADIF。</div>
+
+  <h3 id="lotw-verify">5.7 验证上传、处理未确认与证书续期</h3>
+  <div class="steps">
+    <div class="step"><h4>登录 LoTW 查看已提交 QSO</h4><p>ARRL LoTW 网站 → Your QSOs → 查看 Submitted/Accepted。刚上传的文件会先排队处理，可在 ARRL 的 <b>Logbook Queue Status</b> 页面查看队列。</p></div>
+    <div class="step"><h4>为什么对方还没确认？</h4><p>LoTW 的确认是双向的：只有对方也把匹配的 QSO 上传后才会显示确认。若长期未确认，检查呼号、UTC 日期/时间、波段、模式、卫星名等字段是否与对方一致，以及你选的 Station Location 是否正确。</p></div>
+    <div class="step"><h4>重复上传会被标记为 Duplicate</h4><p>TQSL 会提示 “some QSOs were duplicates or out of date range”，这是正常保护机制，不会重复计数。若你确实改了 QSO，需按 LoTW 的“更正”流程处理。</p></div>
+    <div class="step"><h4>证书续期</h4><p>TQSL → Callsign Certificate → Renew；或按 ARRL 邮件提示操作。续期仍在“主控电脑”上完成，完成后把 TQSL 备份恢复到其他电脑。</p></div>
+    <div class="step"><h4>换电脑</h4><p>官方推荐：在主控电脑上 TQSL → 创建 <b>Backup File</b>；把备份复制到新电脑；在新电脑 TQSL 中 <b>Restore</b>，即可带上呼号证书、私钥、Station Location 与偏好设置。</p></div>
+  </div>
+
+  <h4>LoTW 上传常见问题速查</h4>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>提示 / 现象</th><th>可能原因</th><th>处理</th></tr></thead>
+    <tbody>
+      <tr><td>No QSOs were processed / duplicates</td><td>这些 QSO 已上传过；或日期超出证书有效范围</td><td>检查是否重复；确认证书有效期与 QSO 日期</td></tr>
+      <tr><td>Station Location 找不到</td><td>证书/位置未复制到当前电脑，或未创建</td><td>用 TQSL 备份/恢复；或新建 Station Location</td></tr>
+      <tr><td>上传成功但对方不确认</td><td>呼号、时间、波段、模式不匹配；对方未上传</td><td>逐项核对；LoTW 确认需双方都上传</td></tr>
+      <tr><td>无法申请/接受证书</td><td>不是申请证书的那台电脑；或缺少证明文件</td><td>回到主控电脑接受；按 ARRL Required Documentation 提交材料</td></tr>
+      <tr><td>换电脑后无法上传</td><td>只复制了 ADIF，没复制证书私钥</td><td>在旧电脑做 TQSL 备份，在新电脑 Restore</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ================= 6. FAQ ================= -->
+<section id="faq">
+  <div class="sec-head"><span class="num">06</span><div><h2>常见问题 FAQ</h2><p>点开每条查看；更具体的问题可以直接问右下角 AI 助手。</p></div></div>
+
+  <details class="acc"><summary>N1MM Logger 和 N1MM Logger+ 是同一个软件吗？</summary><div class="acc-body">
+    <p>不是。经典版 <b>N1MM Logger</b> 早已停止开发；现在使用和支持的是 <b>N1MM Logger+</b>（常写作 N1MM+），你现在安装的就是 Plus 版本（页面顶部会自动显示检测到的版本号）。网上老教程里的菜单/流程可能仍可用，但数据库结构与功能请以 N1MM+ 官方文档为准。</p>
+  </div></details>
+
+  <details class="acc"><summary>我还没有呼号证书，LoTW 第一步做什么？</summary><div class="acc-body">
+    <p>先装 TQSL → 在 TQSL 里 Request New Callsign Certificate → 等 ARRL 邮件 → <b>在申请证书的同一台电脑上接受证书</b> → 定义 Station Location → 再上传 QSO。没有证书，TQSL 无法签名。</p>
+    <p>参考：<a href="https://lotw.arrl.org/lotw-help/getting-started/" target="_blank" rel="noopener">LoTW Getting Started</a></p>
+  </div></details>
+
+  <details class="acc"><summary>我在两个不同地点操作，能用同一套 N1MM 日志吗？</summary><div class="acc-body">
+    <p>可以统一管理，但要满足两个条件：<b>(1)</b> 每个物理地点在 N1MM 中更新正确的 Station Data（网格/州/分区/DXCC）；<b>(2)</b> 导出给 TQSL 时按地点拆成不同 ADIF，并用各自的 Station Location 分别签名。</p>
+    <p>最稳妥的做法是每个地点新建一份 Log；多机同场则用 N1MM 网络模式，并用 Station Name 区分台站后按名称导出。</p>
+  </div></details>
+
+  <details class="acc"><summary>两台电脑能同时打开同一个 .s3db 数据库吗？</summary><div class="acc-body">
+    <p>不要这样做。N1MM 的多机方案是它自己的 <b>Network</b> 功能，而不是共享同一个数据库文件。把 .s3db 放在 OneDrive/共享盘上让两台机同时打开，极易造成冲突或数据库损坏。</p>
+    <p>正确做法：多机同场 → 启用 N1MM Network；非同时 → 关闭程序后复制数据库，或在另一台机器上用 ADIF 合并。</p>
+  </div></details>
+
+  <details class="acc"><summary>Cabrillo 和 ADIF 有什么区别？该交哪个？</summary><div class="acc-body">
+    <p><b>Cabrillo（.LOG）</b>是比赛主办方要求的成绩提交格式，包含比赛类别、声明分数与 QSO 行，用 N1MM 的 <code>File &gt; Generate Cabrillo File</code> 生成。<b>ADIF（.adi）</b>是通用通联交换格式，用 <code>File &gt; Export &gt; Export ADIF to file…</code> 生成，交给 TQSL 签名后上传 LoTW。</p>
+    <p>一句话：<b>比赛提交用 Cabrillo，LoTW 用 ADIF。</b></p>
+  </div></details>
+
+  <details class="acc"><summary>比赛日志被退回，最常见原因是什么？</summary><div class="acc-body">
+    <ul>
+      <li>Sent Exchange 里多写了 5NN/59；</li>
+      <li>Log Type 选错（相近比赛名）；</li>
+      <li>Category（组别/功率/波段/Assisted）与申报不符；</li>
+      <li>Cabrillo 头部缺 LOCATION、OPERATORS 等信息；</li>
+      <li>时间不是 UTC，或起止日期不对。</li>
+    </ul>
+    <p>处理：改设置 → <code>Tools &gt; Rescore Current Contest</code> → <code>File &gt; Generate Cabrillo File</code> → 用记事本核对头部 → 重新提交。</p>
+  </div></details>
+
+  <details class="acc"><summary>怎样把 WSJT-X / JTDX / JTAlert 的 QSO 自动送进 N1MM？</summary><div class="acc-body">
+    <p>在 Configurer 的 <b>WSJT/JTDX Setup</b> 标签启用对应端口：WSJT-X/JTAlert 默认 UDP <code>2333</code>，JTDX 默认 TCP <code>52001</code>。勾选 Enable 后（可能需要重启 N1MM）即可接收。官方文档《Sending Log Data to N1MM Logger》给出了支持的 ADIF 字段与数据格式。</p>
+  </div></details>
+
+  <details class="acc"><summary>数据库打不开 / 提示不是日志数据库怎么办？</summary><div class="acc-body">
+    <p>先不要反复尝试写操作。关闭 N1MM，把 <code>Databases</code> 目录整个复制一份留底；检查是否误选了 <code>.s3db.bkup</code> 或系统数据库；若主文件损坏，可尝试用同名 <code>.bkup</code> 备份恢复（先复制一份备份文件再改名为 .s3db）。同时查看用户目录下的 <code>LogError.txt</code> 与 <code>Diagnostics</code> 文件夹，必要时在 N1MM 官方支持站提交工单。</p>
+  </div></details>
+
+  <details class="acc"><summary>怎样备份、换电脑或重装系统？</summary><div class="acc-body">
+    <p>N1MM 侧：关闭程序，复制整个 <code data-env="dataDir">用户数据目录</code>；新电脑安装同版本 N1MM+ 后，把这个目录放回 <code>Documents</code> 覆盖。</p>
+    <p>TQSL 侧：在旧电脑 TQSL 中做 <b>Backup File</b>，在新电脑 <b>Restore</b>，这样呼号证书、私钥、Station Location 与偏好设置都会带过去。不要把私钥单独用邮件明文发送。</p>
+  </div></details>
+
+  <details class="acc"><summary>换了呼号，旧 QSO 怎么办？</summary><div class="acc-body">
+    <p>N1MM 里可以继续用原数据库/日志保存历史 QSO；新呼号建议新建日志，并把 Station Data 改为新呼号。LoTW 侧需要为新呼号申请新的 Callsign Certificate（并可能需要更新 LoTW 账户的主呼号），旧呼号证书仍可用于上传旧 QSO。</p>
+    <p>参考：<a href="https://lotw.arrl.org/lotw-help/callsign-change/" target="_blank" rel="noopener">LoTW Changing Your Primary Callsign</a>、<a href="https://lotw.arrl.org/lotw-help/multiple-callsigns-locations/" target="_blank" rel="noopener">Multiple Callsigns and Operating Locations</a></p>
+  </div></details>
+
+  <details class="acc"><summary>不同地点需要分别申请呼号证书吗？</summary><div class="acc-body">
+    <p>不需要——<b>呼号证书绑定的是呼号，不是地点</b>。地点由 Station Location 表达。同一呼号在不同地点操作：一张证书 + 多个 Station Location。不同呼号才需要各自的 Callsign Certificate。</p>
+  </div></details>
+
+  <details class="acc"><summary>N1MM 能直接上传 LoTW 吗？</summary><div class="acc-body">
+    <p>按 N1MM 官方 FAQ，标准流程是：<b>N1MM 生成 ADIF（File &gt; Export &gt; ADIF）→ 用 TQSL 处理并生成 .TQ8 → 上传到 LoTW</b>。签名与上传由 ARRL 的 TQSL 完成，这也是官方支持的路径。</p>
+  </div></details>
+
+  <details class="acc"><summary>DeepSeek API Key 安全吗？会不会泄露我的日志？</summary><div class="acc-body">
+    <p>本页默认把 API Key 保存在你浏览器的 <code>localStorage</code>，只发送给 DeepSeek API（<code>https://api.deepseek.com</code>）或你本地运行的代理；网页不会读取或上传你的 .s3db/ADIF 文件。请不要在公用电脑上保存 Key；如果介意，可以只在本机使用，或改用自己搭建的代理并随时轮换 Key。</p>
+  </div></details>
+</section>
+
+<!-- ================= 7. AI ================= -->
+<section id="ai">
+  <div class="sec-head"><span class="num">07</span><div><h2>DeepSeek AI 助手：问 N1MM / 比赛 / LoTW 的专业问题</h2><p>右下角的聊天窗口已内置本页知识库，可回答“某比赛怎么设置交换信息”“多地点怎么签 LoTW”等具体问题，并给出官方文档链接。</p></div></div>
+
+  <div class="grid c2">
+    <div class="card">
+      <h3 style="margin-top:0">怎么开始用</h3>
+      <div class="steps">
+        <div class="step"><h4>准备 DeepSeek API Key</h4><p>到 DeepSeek 开放平台创建 API Key（以 <code>sk-</code> 开头）。新用户通常需要先充值；具体价格见官方定价页。</p></div>
+        <div class="step"><h4>点右下角“AI 助手” → ⚙ 设置</h4><p>粘贴 API Key，选择模型（默认 <code>deepseek-v4-pro</code>），按需开启“思考模式”和“知识库增强”，保存。</p></div>
+        <div class="step"><h4>直接提问</h4><p>可以用下面的预设问题，也可以描述你自己的场景（呼号、比赛、地点、设备情况）。回答会尽量给出菜单路径与可复制的命令。</p></div>
+      </div>
+      <p class="hint">没有 API Key 也能用：AI 会退回到“本地知识库检索”，直接返回本页整理好的相关章节与官方链接。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">模型与参数说明</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>模型</th><th>定位</th><th>建议</th></tr></thead>
+        <tbody>
+          <tr><td><code>deepseek-v4-pro</code></td><td>当前旗舰，复杂推理/长文更稳</td><td>复杂比赛规则、LoTW 排错（默认）</td></tr>
+          <tr><td><code>deepseek-flash</code></td><td>快速、便宜，1M 上下文</td><td>日常问答、查菜单</td></tr>
+          <tr><td><code>deepseek-chat</code> / <code>deepseek-reasoner</code></td><td>兼容旧别名（是否可用以官方为准）</td><td>旧脚本/旧客户端</td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li><b>思考模式：</b>DeepSeek V4 支持 thinking，请求体用 <code>{"thinking":{"type":"enabled"}}</code> 切换，<code>reasoning_effort</code> 可选 <code>low/high/max</code>；思考内容通过 <code>reasoning_content</code> 返回，本页会折叠显示。</li>
+        <li><b>思考模式下</b> temperature / presence_penalty / frequency_penalty 不生效；要精确控温请关闭思考模式。</li>
+        <li><b>接口地址：</b><code>https://api.deepseek.com</code>，端点 <code>POST /chat/completions</code>（OpenAI 兼容格式）。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">预设问题（点一下即可发送）</h3>
+    <div id="aiPresetGrid" class="grid c2"></div>
+  </div>
+
+  <div class="callout note"><b>知识库增强怎么工作：</b>发送问题前，网页会在本页内置的 N1MM/LoTW 知识条目中做关键词检索，把最相关的 3–5 条作为“参考资料”连同你的问题一起发给 DeepSeek。这样回答会更贴合本页与官方文档，而不是泛泛而谈。你也可以在设置中关闭它。</div>
+  <div class="callout warn"><b>AI 不能代替官方规则：</b>比赛类别、交换信息、截止时间、LoTW 政策等请以主办方与 ARRL 最新官方页面为准。AI 回答中会尽量附上来源链接，遇到冲突时以官方为准。</div>
+
+  <div class="grid c3">
+    <button class="btn primary" id="openChatBtn2">🤖 打开 AI 助手</button>
+    <button class="btn" id="openChatSettings">⚙️ 配置 API Key</button>
+    <a class="btn ghost" href="#sources">📚 查看官方资料</a>
+  </div>
+</section>
+
+<!-- ================= 8. 来源 ================= -->
+<section id="sources">
+  <div class="sec-head"><span class="num">08</span><div><h2>官方资料与下载</h2><p>本页内容主要依据以下官方来源整理；软件与规则会更新，动手前建议再核对一遍。</p></div></div>
+  <div class="card">
+    <h3 style="margin-top:0">N1MM Logger+ 官方</h3>
+    <ul class="src-list">
+      <li><a href="https://n1mmwp.hamdocs.com/" target="_blank" rel="noopener">N1MM Logger+ 官方文档首页</a></li>
+      <li><a href="https://n1mmwp.hamdocs.com/getting-started/" target="_blank" rel="noopener">Getting Started（初次使用）</a></li>
+      <li><a href="https://n1mmwp.hamdocs.com/getting-started/installing-and-upgrading-n1mm-logger/" target="_blank" rel="noopener">安装与升级</a></li>
+      <li><a href="https://n1mmwp.hamdocs.com/setup/the-configurer/" target="_blank" rel="noopener">The Configurer（硬件/音频/其他配置）</a></li>
+      <li><a href="https://n1mmwp.hamdocs.com/setup/contest-setup/" target="_blank" rel="noopener">Contest Setup（比赛设置对话框）</a></li>
+      <li><a href="https://n1mmwp.hamdocs.com/manual-supported/contests-setup/setup-hf-contests/" target="_blank" rel="noopener">HF SSB/CW 比赛设置</a></li>
+      <li><a href="https://n1mmwp.hamdocs.com/getting-started/operating-a-contest/" target="_blank" rel="noopener">Operating a Contest（Cabrillo / 合并日志）</a></li>
+      <li><a href="https://n1mmwp.hamdocs.com/manual-operating/multiple-computer-and-multiple-op-contesting/" target="_blank" rel="noopener">多机与多操作员比赛</a></li>
+      <li><a href="https://n1mmwp.hamdocs.com/manual-windows/network-status-window/" target="_blank" rel="noopener">Network Status Window</a></li>
+      <li><a href="https://n1mmwp.hamdocs.com/faq/" target="_blank" rel="noopener">N1MM 官方 FAQ（含 LoTW 导出说明）</a></li>
+      <li><a href="https://n1mmwp.hamdocs.com/downloads/n1mm-full-install/" target="_blank" rel="noopener">Full Install 下载</a></li>
+      <li><a href="https://n1mmwp.hamdocs.com/downloads/latest-update/" target="_blank" rel="noopener">Latest Update 下载</a></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">ARRL LoTW / TQSL 官方</h3>
+    <ul class="src-list">
+      <li><a href="https://lotw.arrl.org/lotw-help/" target="_blank" rel="noopener">LoTW Help 首页</a></li>
+      <li><a href="https://lotw.arrl.org/lotw-help/getting-started/" target="_blank" rel="noopener">Getting Started with LoTW</a></li>
+      <li><a href="https://lotw.arrl.org/lotw-help/stnloc/" target="_blank" rel="noopener">Defining a Station Location</a></li>
+      <li><a href="https://lotw.arrl.org/lotw-help/multiple-callsigns-locations/" target="_blank" rel="noopener">Multiple Callsigns and Operating Locations</a></li>
+      <li><a href="https://lotw.arrl.org/lotw-help/multiple-computers/" target="_blank" rel="noopener">Using LoTW on Multiple Computers</a></li>
+      <li><a href="https://lotw.arrl.org/lotw-help/submitting-qsos/" target="_blank" rel="noopener">Submitting QSOs to LoTW</a></li>
+      <li><a href="https://lotw.arrl.org/lotw-help/cmdline/" target="_blank" rel="noopener">TQSL Command Line Interface</a></li>
+      <li><a href="https://www.arrl.org/tqsl-download" target="_blank" rel="noopener">TQSL 官方下载页</a></li>
+      <li><a href="https://www.arrl.org/logbook-of-the-world" target="_blank" rel="noopener">ARRL Logbook of The World</a></li>
+      <li><a href="https://www.arrl.org/contest-rules" target="_blank" rel="noopener">ARRL Contest Rules（比赛规则总览）</a></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">DeepSeek API 官方</h3>
+    <ul class="src-list">
+      <li><a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">DeepSeek API Docs</a></li>
+      <li><a href="https://api-docs.deepseek.com/api/create-chat-completion" target="_blank" rel="noopener">Chat Completions API</a></li>
+      <li><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">模型与价格</a></li>
+      <li><a href="https://api-docs.deepseek.com/guides/thinking_mode" target="_blank" rel="noopener">Thinking Mode（思考模式）</a></li>
+    </ul>
+  </div>
+  <p class="hint">整理日期 2026-10-06 · 本页为个人学习/操作参考，不隶属于 N1MM Logger+ 或 ARRL。软件界面、比赛规则与 LoTW 政策可能更新，请以官方最新说明为准。</p>
+</section>
+
+<footer>
+  <p><b>N1MM Logger+ 中文实践指南</b> · 基于自动检测到的本机 N1MM Logger+ 版本与官方文档整理 · 内置 DeepSeek AI 助手</p>
+  <p>提示：API Key 仅保存在浏览器 localStorage；网页不会读取你的日志文件。比赛与 LoTW 规则以官方为准。</p>
+</footer>
+
+</main>
+</div><!-- /wrap -->
+
+<!-- ================= 聊天：悬浮按钮 + 面板 ================= -->
+<button class="chat-fab" id="chatFab" aria-label="打开 AI 助手"><span class="dot"></span> AI 助手</button>
+
+<aside class="chat-panel" id="chatPanel" aria-label="DeepSeek AI 助手">
+  <div class="chat-head">
+    <span class="avatar">🤖</span>
+    <span><b>N1MM / LoTW 助手</b><small id="chatStatus">DeepSeek · 未配置 API Key</small></span>
+    <span class="sp">
+      <button class="icon-btn" id="btnSettings" title="设置">⚙</button>
+      <button class="icon-btn" id="btnExport" title="导出对话">⬇</button>
+      <button class="icon-btn" id="btnClear" title="清空对话">🗑</button>
+      <button class="icon-btn" id="btnClose" title="关闭">✕</button>
+    </span>
+  </div>
+  <div class="chat-body">
+    <div class="chat-main">
+      <div class="chat-log" id="chatLog"></div>
+      <div class="chat-foot">
+        <div class="presets" id="presets"></div>
+        <div class="chat-input">
+          <textarea id="chatInput" rows="1" placeholder="例如：ARRL DX CW 的 Sent Exchange 怎么填？多地点怎么用 TQSL 分别上传？"></textarea>
+          <button class="send" id="chatSend">发送</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 设置抽屉 -->
+  <div class="drawer" id="chatDrawer">
+    <h3>AI 助手设置</h3>
+    <p class="hint">Key 只保存在本机浏览器。若要彻底避免 Key 出现在浏览器，可用 <code>server.mjs</code> 启动本地代理并在“接口模式”选择“本地代理”。</p>
+    <div class="field">
+      <label for="apiKey">DeepSeek API Key</label>
+      <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off">
+      <small>到 platform.deepseek.com 创建；不会提交到本页以外的服务器。</small>
+    </div>
+    <div class="field">
+      <label for="modelSel">模型</label>
+      <select id="modelSel">
+        <option value="deepseek-v4-pro">deepseek-v4-pro（旗舰，推荐）</option>
+        <option value="deepseek-flash">deepseek-flash（快速/经济）</option>
+        <option value="deepseek-chat">deepseek-chat（旧别名）</option>
+        <option value="deepseek-reasoner">deepseek-reasoner（旧别名）</option>
+        <option value="__custom">自定义…</option>
+      </select>
+    </div>
+    <div class="field" id="customModelField" style="display:none">
+      <label for="customModel">自定义模型名</label>
+      <input type="text" id="customModel" placeholder="例如 deepseek-v4-pro">
+    </div>
+    <div class="field">
+      <label for="apiMode">接口模式</label>
+      <select id="apiMode">
+        <option value="auto">自动（localhost 用本地代理，file:// 直连）</option>
+        <option value="proxy">本地代理 /api/chat（需用 server.mjs 启动）</option>
+        <option value="direct">直连 https://api.deepseek.com</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="baseUrl">Base URL（直连模式）</label>
+      <input type="text" id="baseUrl" value="https://api.deepseek.com">
+    </div>
+    <div class="field">
+      <label class="switch"><input type="checkbox" id="streamOn" checked><span>流式输出（打字机效果）</span></label>
+    </div>
+    <div class="field">
+      <label class="switch"><input type="checkbox" id="thinkingOn" checked><span>思考模式（DeepSeek V4）</span></label>
+    </div>
+    <div class="field">
+      <label for="effortSel">思考强度 reasoning_effort</label>
+      <select id="effortSel"><option value="low">low（快）</option><option value="high" selected>high（默认）</option><option value="max">max（最深）</option></select>
+    </div>
+    <div class="field">
+      <label for="tempInput">Temperature（仅关闭思考模式时有效）</label>
+      <input type="number" id="tempInput" min="0" max="2" step="0.1" value="0.3">
+    </div>
+    <div class="field">
+      <label class="switch"><input type="checkbox" id="kbOn" checked><span>知识库增强（把本页相关资料随问题一起发送）</span></label>
+    </div>
+    <div class="field">
+      <label for="sysPrompt">系统提示词（可自定义）</label>
+      <textarea id="sysPrompt" rows="5"></textarea>
+      <small>已预置“N1MM/LoTW 中文专家”角色；除非你知道自己在做什么，否则不建议大改。</small>
+    </div>
+    <div class="divider"></div>
+    <div class="field">
+      <button class="btn primary" id="btnSaveSettings">保存设置</button>
+      <button class="btn" id="btnTest">测试连接</button>
+      <button class="btn ghost" id="btnDrawerClose">返回对话</button>
+    </div>
+    <p class="hint">模型名、参数与价格可能变化，请以 DeepSeek 官方文档为准。</p>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
